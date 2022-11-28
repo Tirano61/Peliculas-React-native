@@ -20,7 +20,7 @@ export const NavigationStacks = () => {
         screenOptions={{
             headerShown: false,
             cardStyle: {
-                backgroundColor: 'white'
+                //backgroundColor: 'white'
             }
         }}
     >

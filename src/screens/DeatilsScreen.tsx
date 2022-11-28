@@ -2,20 +2,25 @@
 
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react'
-import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon  from 'react-native-vector-icons/Ionicons';
 import { RootStackParams } from '../navigation.tsx/NavigationStacks';
+import { useMovieDetails } from '../hooks/useMovieDetails';
+import { MovieDetails } from '../components/MovieDetails';
 
 
 interface Props extends StackScreenProps<RootStackParams, 'DetailsScreen'>{};
 const screenHeight = Dimensions.get('screen').height;
 
-export const DetailsScreen = ( { route }: Props) => {
+export const DetailsScreen = ( { route, navigation }: Props) => {
 
 
   const movie = route.params;
   const uri =  `https://image.tmdb.org/t/p/w500${ movie.poster_path }`;
+
+  const { isLoading, cast, movieFull } = useMovieDetails(movie.id);
+
   return (
     <ScrollView>
       <View style={styles.imageContainer}>
@@ -29,16 +34,27 @@ export const DetailsScreen = ( { route }: Props) => {
         <Text style={styles.title}>{movie.title}</Text>
       </View>
 
-      <View style={styles.marginContainer}>
-       <Icon 
-        name='star'
-        color={'grey'}
-        size={20}
-       />
-      </View>
+   
+        {
+          isLoading
+            ? <ActivityIndicator size={30} color='grey' style={{marginTop:20}} />
+            : <MovieDetails movieFull={ movieFull! } cast={ cast }/>
+        }
+
+        {/* Boton para cerrar */}
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.pop()}
+        >
+          <Icon
+            name='arrow-back-outline'
+            color={'black'}
+            size={60}
+          />
+        </TouchableOpacity>
+        
 
     </ScrollView>
-    
 
   )
 }
@@ -48,7 +64,7 @@ const styles = StyleSheet.create({
   imageContainer:{
     overflow: 'hidden',
     width: '100%',
-    height: screenHeight * 0.65,
+    height: screenHeight * 0.7,
     shadowColor: "black",
       shadowOffset: {
           width: 20,
@@ -75,6 +91,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'black',
+  },
+  backButton:{
+    position: 'absolute',   
+    elevation: 9,
   },
   
 });
