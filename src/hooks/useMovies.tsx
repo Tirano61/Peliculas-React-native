@@ -21,8 +21,8 @@ export const useMovies = () => {
         upcoming: [],  
     });
   
-    let pages;
-    const getMovies = async() => {
+ 
+    const getMovies = async(page: number = 1) => {
         const nowPlayingPromise = moviDB.get<MovieDBNowPlaying>('/now_playing');
         const popularPromise    = moviDB.get<MovieDBNowPlaying>('/popular');
         const topRatedPromise   = moviDB.get<MovieDBNowPlaying>('/top_rated');
@@ -53,7 +53,7 @@ export const useMovies = () => {
     return{
         ...movieState,
         isLoading,
-        pages,
+        getMovies,
     }
     
 }

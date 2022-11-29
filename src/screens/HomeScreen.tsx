@@ -10,17 +10,20 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { HorizontalSlider } from '../components/HorizontalSlider';
 import { GradientBackgound } from '../components/GradientBackgound';
 import { getImageColors } from '../helpers/getColores';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { GradientContext } from '../context/GradientContext';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const { width: windowWidth } = Dimensions.get('window');
 
 export const HomeScreen = () => {
-  let page = 1
-  const { nowPlaying, isLoading, popular, topRated, upcoming } = useMovies(page);
+  
+  const [pageState, setPageState] = useState(1);
+  const { nowPlaying, isLoading, popular, topRated, upcoming, getMovies } = useMovies();
   const { top } = useSafeAreaInsets();
   const { setMainColorState } = useContext(GradientContext);
+
+  
 
   const getPosterColors = async(index: number) => {
 
@@ -33,12 +36,17 @@ export const HomeScreen = () => {
   }
 
   useEffect(() => {
-    
-    if(nowPlaying.length > 0){
-      getPosterColors(0)
+    return () => {
+      if(nowPlaying.length > 0){
+        getPosterColors(0)
+      }
     }
+    
   
   }, [ nowPlaying ])
+  
+
+  
  
 
   if(isLoading){
@@ -48,6 +56,7 @@ export const HomeScreen = () => {
       </View>
     )
   }
+  
  
   return (
     <GradientBackgound>
@@ -58,7 +67,6 @@ export const HomeScreen = () => {
             <Carousel
               data={ nowPlaying }
               renderItem={ ({item}: any) => <MoviePoster movie={item} /> }
-
               sliderWidth={windowWidth}
               itemWidth={300}
               inactiveSlideOpacity={0.9}
@@ -68,7 +76,7 @@ export const HomeScreen = () => {
           </View>
           <TouchableOpacity  
             style={styles.botones}
-            onPress={() => { page ++; useMovies(page) }}
+            onPress={() => { setPageState(pageState +1); getMovies(pageState) }}
           >
             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
               <Text style={{ color: 'white' }}>Next</Text>
