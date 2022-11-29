@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
     image:{
         flex: 1,
         borderRadius: 18,
-        
     },
     imageContainer:{
         

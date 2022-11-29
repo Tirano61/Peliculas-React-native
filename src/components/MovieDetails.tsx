@@ -7,7 +7,6 @@ import { MovieFull } from '../interfaces/MovieInterface';
 import { Cast } from '../interfaces/CredictsInterface';
 import Icon  from 'react-native-vector-icons/Ionicons';
 import { CastItem } from './CastItem';
-import { HorizontalSlider } from './HorizontalSlider';
 
 
 interface Props{

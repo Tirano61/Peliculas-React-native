@@ -6,9 +6,9 @@ import { MovieDBNowPlaying, Movie } from '../interfaces/MovieInterface';
 
 interface MoviesState{
     nowPlaying: Movie[],
-    popular: Movie[],
-    topRated: Movie[],
-    upcoming: Movie[], 
+    popular:    Movie[],
+    topRated:   Movie[],
+    upcoming:   Movie[], 
 }
 
 export const useMovies = () => {
@@ -21,7 +21,7 @@ export const useMovies = () => {
         upcoming: [],  
     });
   
-
+    let pages;
     const getMovies = async() => {
         const nowPlayingPromise = moviDB.get<MovieDBNowPlaying>('/now_playing');
         const popularPromise    = moviDB.get<MovieDBNowPlaying>('/popular');
@@ -38,6 +38,8 @@ export const useMovies = () => {
         })
 
         setisLoading(false);
+        
+        
     }
 
     useEffect(() => {
@@ -51,6 +53,7 @@ export const useMovies = () => {
     return{
         ...movieState,
         isLoading,
+        pages,
     }
     
 }
